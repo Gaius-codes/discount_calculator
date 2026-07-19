@@ -23,8 +23,21 @@ class PercentageDiscount(DiscountStrategy):
     
     def apply_discount(self, product: Product) -> float:
         return product.price * (1 - self.percent / 100)
+    
+class FixedAmountDiscount(DiscountStrategy):
+    def __init__(self, amount: int) -> None:
+        self.amount = amount
+
+    def is_applicable(self, product: Product, user_tier: str) -> bool:
+        return product.price * 0.9 > self.amount
+
+    def apply_discount(self, product: Product) -> float:
+        return product.price - self.amount
 
 product = Product("Laptop", 1000)
 
 discount = PercentageDiscount(25)
 print(discount.apply_discount(product))
+
+fixed_discount = FixedAmountDiscount(5)
+print(fixed_discount.apply_discount(product))
